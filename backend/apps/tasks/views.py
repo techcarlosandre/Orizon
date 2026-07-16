@@ -18,6 +18,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from apps.suggestions.client import get_category_suggestion
 from .filters import TaskFilter
 from .models import Category, Task, TaskShare
 from .pagination import TaskPagination
@@ -108,6 +109,19 @@ class TaskViewSet(ModelViewSet):
         return TaskDetailSerializer
 
     # ── Standard CRUD overrides ────────────────────────────────────────────────
+    def create(self, request, *args, **kwargs):
+        """
+        Override create to append a category suggestion to the response.
+
+        The suggestion is fetched via httpx after the task is saved, so:
+        - Task creation is never blocked by suggestion failures.
+        - Timeout / connection errors fall back to 'Geral' silently.
+        """
+        response = super().create(request, *args, **kwargs)
+        title = request.data.get("title", "")
+        response.data["suggested_category"] = get_category_suggestion(title)
+        return response
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
