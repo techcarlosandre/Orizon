@@ -5,19 +5,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
-// Placeholder Dashboard para compilação na Fase 7.
-// A implementação final do Dashboard será feita na Fase 8.
-function DashboardPlaceholder() {
-  return (
-    <div style={{ textAlign: "center", marginTop: "4rem" }}>
-      <h2>🚀 Dashboard Orizon</h2>
-      <p style={{ color: "var(--text-secondary)", marginTop: "1rem" }}>
-        Auth Setup concluído. Dashboard completo será implementado na Fase 8.
-      </p>
-    </div>
-  );
-}
+import Dashboard from "./pages/Dashboard";
 
 export default function App() {
   return (
@@ -31,7 +19,7 @@ export default function App() {
           {/* Rotas Privadas (Protegidas) */}
           <Route element={<PrivateRoute />}>
             <Route element={<Layout />}>
-              <Route path="/" element={<DashboardPlaceholder />} />
+              <Route path="/" element={<Dashboard />} />
               <Route path="/tasks" element={<Navigate to="/" replace />} />
             </Route>
           </Route>
