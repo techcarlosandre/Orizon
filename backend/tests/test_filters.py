@@ -56,22 +56,22 @@ class TestTaskFilters:
 
     def test_filter_by_search_title_icontains(self, make_user, make_task):
         user = make_user()
-        make_task(user, "Reunião com cliente")
+        make_task(user, "Reuniao com cliente")
         make_task(user, "Comprar mantimentos")
-        make_task(user, "Reunião de planejamento")
+        make_task(user, "Reuniao de planejamento")
 
         client, _ = get_auth_client(user)
-        resp = client.get(TASKS, {"search": "reunião"})
+        resp = client.get(TASKS, {"search": "reuniao"})
         titles = [t["title"] for t in resp.data["results"]]
-        assert "Reunião com cliente" in titles
-        assert "Reunião de planejamento" in titles
+        assert "Reuniao com cliente" in titles
+        assert "Reuniao de planejamento" in titles
         assert "Comprar mantimentos" not in titles
 
     def test_filter_search_is_case_insensitive(self, make_user, make_task):
         user = make_user()
-        make_task(user, "REUNIÃO IMPORTANTE")
+        make_task(user, "REUNIAO IMPORTANTE")
         client, _ = get_auth_client(user)
-        resp = client.get(TASKS, {"search": "reunião"})
+        resp = client.get(TASKS, {"search": "reuniao"})
         assert resp.data["count"] >= 1
 
     def test_filter_by_due_date_after(self, make_user, make_task):

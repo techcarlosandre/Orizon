@@ -1,5 +1,8 @@
 # Orizon — To-Do List Avançado
 
+[![Backend CI](https://github.com/Carlos/orizon/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/Carlos/orizon/actions/workflows/backend-ci.yml)
+[![Frontend CI](https://github.com/Carlos/orizon/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/Carlos/orizon/actions/workflows/frontend-ci.yml)
+
 > Aplicação web de gerenciamento de tarefas com autenticação JWT, compartilhamento, categorias, filtros e API externa de sugestões.
 
 ---

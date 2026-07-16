@@ -29,7 +29,7 @@ class TestCategoryCRUD:
 
         client, _ = get_auth_client(alice)
         resp = client.get(CATEGORIES)
-        names = [c["name"] for c in resp.data]
+        names = [c["name"] for c in resp.data["results"]]
         assert "Alice Cat" in names
         assert "Bob Cat" not in names
 
