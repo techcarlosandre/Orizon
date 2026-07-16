@@ -103,6 +103,10 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# ── Custom User Model ─────────────────────────────────────────────────────────
+# Must be set before the first migration of any app that has FK to User.
+AUTH_USER_MODEL = "accounts.User"
+
 # ── Django REST Framework ──────────────────────────────────────────────────────
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
