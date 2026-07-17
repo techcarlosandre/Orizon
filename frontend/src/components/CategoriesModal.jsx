@@ -4,6 +4,7 @@ export default function CategoriesModal({ isOpen, onClose, categories, onCreate,
   const [newCatName, setNewCatName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showDeleteConfirmId, setShowDeleteConfirmId] = useState(null);
 
   if (!isOpen) return null;
 
@@ -23,13 +24,21 @@ export default function CategoriesModal({ isOpen, onClose, categories, onCreate,
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Deseja realmente excluir esta categoria? As tarefas vinculadas a ela não serão excluídas, mas ficarão sem categoria.")) {
-      try {
-        await onDelete(id);
-      } catch (err) {
-        alert("Erro ao excluir categoria.");
-      }
+  const handleDelete = (id) => {
+    setError("");
+    setShowDeleteConfirmId(id);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!showDeleteConfirmId) return;
+    setLoading(true);
+    try {
+      await onDelete(showDeleteConfirmId);
+      setShowDeleteConfirmId(null);
+    } catch (err) {
+      setError("Erro ao excluir categoria.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,6 +96,43 @@ export default function CategoriesModal({ isOpen, onClose, categories, onCreate,
           </button>
         </div>
       </div>
+      {showDeleteConfirmId && (
+        <div className="modal-overlay" style={{ zIndex: 1100 }}>
+          <div className="modal-content" style={{ maxWidth: "420px" }}>
+            <div className="modal-header">
+              <h3>Excluir Categoria</h3>
+              <button 
+                type="button" 
+                className="btn-close" 
+                onClick={() => setShowDeleteConfirmId(null)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="modal-body" style={{ margin: "1.5rem 0", color: "var(--text-primary)" }}>
+              <p>
+                Deseja realmente excluir esta categoria? As tarefas vinculadas a ela não serão excluídas, mas ficarão sem categoria.
+              </p>
+            </div>
+            <div className="modal-footer" style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => setShowDeleteConfirmId(null)}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="btn-primary danger"
+                onClick={handleConfirmDelete}
+              >
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

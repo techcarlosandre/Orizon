@@ -43,9 +43,7 @@ export default function TaskCard({
 
   const handleDelete = (e) => {
     e.stopPropagation();
-    if (window.confirm("Deseja realmente excluir esta tarefa permanentemente?")) {
-      onDelete(task.id);
-    }
+    onDelete(task.id);
   };
 
   return (

@@ -15,6 +15,7 @@ export default function ShareModal({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(false);
+  const [showRevokeConfirmId, setShowRevokeConfirmId] = useState(null);
 
   // Carrega a lista de compartilhamentos ativos ao abrir
   const loadShares = useCallback(async () => {
@@ -58,14 +59,22 @@ export default function ShareModal({
     }
   };
 
-  const handleRevoke = async (shareId) => {
-    if (window.confirm("Deseja revogar o acesso deste usuário?")) {
-      try {
-        await onRevokeShare(task.id, shareId);
-        loadShares(); // Recarrega lista
-      } catch (err) {
-        alert("Erro ao revogar compartilhamento.");
-      }
+  const handleRevoke = (shareId) => {
+    setError("");
+    setShowRevokeConfirmId(shareId);
+  };
+
+  const handleConfirmRevoke = async () => {
+    if (!showRevokeConfirmId) return;
+    setLoading(true);
+    try {
+      await onRevokeShare(task.id, showRevokeConfirmId);
+      setShowRevokeConfirmId(null);
+      loadShares(); // Recarrega lista
+    } catch (err) {
+      setError("Erro ao revogar compartilhamento.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -165,6 +174,41 @@ export default function ShareModal({
           </button>
         </div>
       </div>
+      {showRevokeConfirmId && (
+        <div className="modal-overlay" style={{ zIndex: 1100 }}>
+          <div className="modal-content" style={{ maxWidth: "420px" }}>
+            <div className="modal-header">
+              <h3>Revogar Compartilhamento</h3>
+              <button 
+                type="button" 
+                className="btn-close" 
+                onClick={() => setShowRevokeConfirmId(null)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="modal-body" style={{ margin: "1.5rem 0", color: "var(--text-primary)" }}>
+              <p>Deseja revogar o acesso deste usuário?</p>
+            </div>
+            <div className="modal-footer" style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => setShowRevokeConfirmId(null)}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="btn-primary danger"
+                onClick={handleConfirmRevoke}
+              >
+                Revogar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

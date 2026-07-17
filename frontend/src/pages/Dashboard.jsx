@@ -43,6 +43,8 @@ export default function Dashboard() {
   const [isCategoriesModalOpen, setIsCategoriesModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [activeTask, setActiveTask] = useState(null);
+  const [taskToDeleteId, setTaskToDeleteId] = useState(null);
+  const [customAlert, setCustomAlert] = useState("");
 
   // ── Fetch de Dados ────────────────────────────────────────────────────────
   const loadData = useCallback(() => {
@@ -86,7 +88,7 @@ export default function Dashboard() {
     try {
       await toggleTaskStatus(taskId);
     } catch (err) {
-      alert("Erro ao alterar status da tarefa.");
+      setCustomAlert("Erro ao alterar status da tarefa.");
     }
   };
 
@@ -114,12 +116,18 @@ export default function Dashboard() {
     loadData();
   };
 
-  const handleDeleteTask = async (taskId) => {
+  const handleDeleteTaskClick = (taskId) => {
+    setTaskToDeleteId(taskId);
+  };
+
+  const handleConfirmDeleteTask = async () => {
+    if (!taskToDeleteId) return;
     try {
-      await deleteTask(taskId);
+      await deleteTask(taskToDeleteId);
+      setTaskToDeleteId(null);
       loadData();
     } catch (err) {
-      alert("Erro ao excluir tarefa.");
+      setCustomAlert("Erro ao excluir tarefa.");
     }
   };
 
@@ -241,7 +249,7 @@ export default function Dashboard() {
                   onToggleStatus={handleToggleStatus}
                   onEdit={handleEditTaskClick}
                   onShare={handleShareTaskClick}
-                  onDelete={handleDeleteTask}
+                  onDelete={handleDeleteTaskClick}
                 />
               ))
             )}
@@ -319,6 +327,52 @@ export default function Dashboard() {
         onListShares={fetchTaskShares}
         onRevokeShare={revokeTaskShare}
       />
+      {/* Custom Alert Modal */}
+      {customAlert && (
+        <div className="modal-overlay" style={{ zIndex: 1100 }}>
+          <div className="modal-content" style={{ maxWidth: "400px" }}>
+            <div className="modal-header">
+              <h3>Aviso</h3>
+              <button className="btn-close" onClick={() => setCustomAlert("")}>
+                &times;
+              </button>
+            </div>
+            <div className="modal-body" style={{ margin: "1.5rem 0", color: "var(--text-primary)" }}>
+              <p>{customAlert}</p>
+            </div>
+            <div className="modal-footer" style={{ display: "flex", justifyContent: "flex-end" }}>
+              <button className="btn-primary" onClick={() => setCustomAlert("")}>
+                Ok
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Task Delete Confirm Modal */}
+      {taskToDeleteId && (
+        <div className="modal-overlay" style={{ zIndex: 1100 }}>
+          <div className="modal-content" style={{ maxWidth: "420px" }}>
+            <div className="modal-header">
+              <h3>Excluir Tarefa</h3>
+              <button className="btn-close" onClick={() => setTaskToDeleteId(null)}>
+                &times;
+              </button>
+            </div>
+            <div className="modal-body" style={{ margin: "1.5rem 0", color: "var(--text-primary)" }}>
+              <p>Deseja realmente excluir esta tarefa permanentemente?</p>
+            </div>
+            <div className="modal-footer" style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}>
+              <button className="btn-secondary" onClick={() => setTaskToDeleteId(null)}>
+                Cancelar
+              </button>
+              <button className="btn-primary danger" onClick={handleConfirmDeleteTask}>
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
