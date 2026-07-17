@@ -54,11 +54,13 @@ dist-ssr/
 .vite/
 
 # ──────────────────────────────────────────────
-# Environment variables
+# Environment variables and Private Keys
 # ──────────────────────────────────────────────
 .env
 .env.*
 !.env.example
+*.pem
+orizon-key.pem
 
 # ──────────────────────────────────────────────
 # Docker
