@@ -8,6 +8,8 @@ Endpoints:
   POST /api/auth/logout/    → blacklists refresh token
 """
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.conf import settings
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
@@ -42,6 +44,31 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+
+        # Envia e-mail de boas-vindas
+        first_name = user.first_name or ""
+        last_name = user.last_name or ""
+        username = user.username
+        email = user.email
+
+        subject = "Bem-vindo ao Projeto Orizon!"
+        message = (
+            f"Bem-vindo {first_name} {last_name}!\n\n"
+            f"O seu usuário é: {username}\n\n"
+            f"Seja bem-vindo ao nosso aplicativo Projeto Orizon.\n\n"
+            "Seja muito bem-vindo. Qualquer dúvida, pode entrar em contato com: techcarlosandre@gmail.com"
+        )
+        try:
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+                fail_silently=True,
+            )
+        except Exception:
+            # Falha silenciosamente para não travar o cadastro caso o SMTP esteja offline
+            pass
 
         return Response(
             {
