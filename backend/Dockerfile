@@ -30,7 +30,10 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN addgroup --system appgroup && adduser --system --group appuser
+RUN addgroup --system appgroup && adduser --system --group appuser && \
+    mkdir -p /app/staticfiles && \
+    chown -R appuser:appgroup /app
+
 USER appuser
 
 EXPOSE 8000
