@@ -7,6 +7,7 @@ export default function TaskModal({
   categories,
   onSave,
   getSuggestion,
+  onCreateCategory,
 }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -15,6 +16,7 @@ export default function TaskModal({
   const [status, setStatus] = useState("pending");
 
   const [suggestedCategoryName, setSuggestedCategoryName] = useState("");
+  const [showConfirmSuggest, setShowConfirmSuggest] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -84,9 +86,22 @@ export default function TaskModal({
       setCategoryId(matchedCategory.id);
       setSuggestedCategoryName("");
     } else {
-      alert(
-        `Para usar a sugestão, crie a categoria "${suggestedCategoryName}" primeiro no menu de Categorias.`
-      );
+      setShowConfirmSuggest(true);
+    }
+  };
+
+  const handleCreateAndApplyCategory = async () => {
+    try {
+      if (onCreateCategory) {
+        const newCat = await onCreateCategory(suggestedCategoryName.trim());
+        setCategoryId(newCat.id);
+        setSuggestedCategoryName("");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Erro ao criar a categoria sugerida.");
+    } finally {
+      setShowConfirmSuggest(false);
     }
   };
 
@@ -229,6 +244,43 @@ export default function TaskModal({
           </div>
         </form>
       </div>
+      {showConfirmSuggest && (
+        <div className="modal-overlay" style={{ zIndex: 1100 }}>
+          <div className="modal-content" style={{ maxWidth: "420px" }}>
+            <div className="modal-header">
+              <h3>Criar Categoria</h3>
+              <button 
+                type="button" 
+                className="btn-close" 
+                onClick={() => setShowConfirmSuggest(false)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="modal-body" style={{ margin: "1.5rem 0", color: "var(--text-primary)" }}>
+              <p>
+                Deseja criar a categoria <strong>{suggestedCategoryName}</strong> automaticamente para esta tarefa?
+              </p>
+            </div>
+            <div className="modal-footer" style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => setShowConfirmSuggest(false)}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={handleCreateAndApplyCategory}
+              >
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

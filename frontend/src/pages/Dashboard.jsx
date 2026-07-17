@@ -300,6 +300,7 @@ export default function Dashboard() {
         categories={categories}
         onSave={handleSaveTask}
         getSuggestion={getCategorySuggestion}
+        onCreateCategory={createCategory}
       />
 
       <CategoriesModal
