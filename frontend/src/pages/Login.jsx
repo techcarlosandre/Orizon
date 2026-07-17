@@ -34,7 +34,7 @@ export default function Login() {
     <div className="auth-wrapper">
       <div className="auth-card">
         <div className="auth-header">
-          <h1>🚀 Projeto Orizon</h1>
+          <h1>📋 Projeto Orizon</h1>
           <p>Sua lista de tarefas inteligente</p>
         </div>
 

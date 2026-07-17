@@ -1,4 +1,4 @@
-# 🚀 Projeto Orizon — Gerenciador de Tarefas Inteligente
+# 📋 Projeto Orizon — Gerenciador de Tarefas Inteligente
 
 [![Backend CI](https://github.com/techcarlosandre/Orizon/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/techcarlosandre/Orizon/actions/workflows/backend-ci.yml)
 [![Frontend CI](https://github.com/techcarlosandre/Orizon/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/techcarlosandre/Orizon/actions/workflows/frontend-ci.yml)
@@ -69,7 +69,7 @@ Os testes simulando a jornada real do usuário (Registro -> Login -> Criar Categ
 
 ---
 
-## 🚀 Como Executar o Projeto Localmente
+## 📋 Como Executar o Projeto Localmente
 
 ### Pré-requisitos
 * Docker e Docker Compose instalados.
