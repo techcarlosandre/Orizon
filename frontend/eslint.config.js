@@ -5,6 +5,7 @@ import pluginReactHooks from "eslint-plugin-react-hooks";
 import pluginReactRefresh from "eslint-plugin-react-refresh";
 
 export default [
+  { ignores: ["dist/**", "node_modules/**"] },
   { files: ["**/*.{js,mjs,cjs,jsx}"] },
   { languageOptions: { globals: { ...globals.browser } } },
   pluginJs.configs.recommended,
@@ -16,9 +17,10 @@ export default [
     },
     rules: {
       "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
-      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+      "react-refresh/only-export-components": "off",
     },
     settings: {
       react: { version: "detect" },
