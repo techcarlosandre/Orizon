@@ -9,7 +9,7 @@
 
 ## 🔗 Links do Projeto
 * **Deploy Ativo (AWS):** [https://orizon.techcarlos.com.br](https://orizon.techcarlos.com.br)
-* **Desenvolvedor:** [Carlos Silva (GitHub)](https://github.com/techcarlosandre)
+* **Desenvolvedor:** [Carlos Silva (Portfólio)](https://portfolio.techcarlos.com.br/)
 
 ---
 
