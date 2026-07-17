@@ -27,8 +27,8 @@ jobs:
       # ── Export images to tarballs ─────────────────────────────────────────────
       - name: Save images to tarballs
         run: |
-          docker save orizon-backend:latest | gzip > /tmp/orizon-backend.tar.gz
-          docker save orizon-frontend:latest | gzip > /tmp/orizon-frontend.tar.gz
+          docker save orizon-backend:latest | gzip > orizon-backend.tar.gz
+          docker save orizon-frontend:latest | gzip > orizon-frontend.tar.gz
 
       # ── SCP tarballs + compose file to EC2 ────────────────────────────────────
       - name: Upload images to EC2
@@ -37,9 +37,8 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "/tmp/orizon-backend.tar.gz,/tmp/orizon-frontend.tar.gz"
+          source: "orizon-backend.tar.gz,orizon-frontend.tar.gz"
           target: "/tmp"
-          strip_components: 1
 
       # ── Load images and restart containers on EC2 ─────────────────────────────
       - name: Deploy on EC2
@@ -50,11 +49,14 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           command_timeout: 10m
           script: |
-            echo "Loading backend image..."
-            docker load < /tmp/orizon-backend.tar.gz
+            BACKEND_TAR=$(find /tmp -name 'orizon-backend.tar.gz' | head -1)
+            FRONTEND_TAR=$(find /tmp -name 'orizon-frontend.tar.gz' | head -1)
 
-            echo "Loading frontend image..."
-            docker load < /tmp/orizon-frontend.tar.gz
+            echo "Loading backend image from $BACKEND_TAR..."
+            docker load < "$BACKEND_TAR"
+
+            echo "Loading frontend image from $FRONTEND_TAR..."
+            docker load < "$FRONTEND_TAR"
 
             echo "Pulling latest code (docker-compose files)..."
             cd /var/www/orizon
