@@ -106,8 +106,3 @@ pytest test_e2e.py -v
 * **Segurança declarativa de permissões:** Criação de mapeamentos específicos para as permissões customizadas de compartilhamento.
 * **Isolamento de Domínio:** A lógica de sugestão de categorias está isolada na pasta `suggestions/` e é consumida via cliente HTTP encapsulado (`httpx`), permitindo sua fácil migração para microsserviços futuros.
 * **Flat Config (ESLint):** Configuração moderna de linting no frontend para garantir conformidade estrita de estilo de código.
-
----
-
-## 📄 Licença
-Este projeto é de código aberto sob os termos da licença [MIT](LICENSE).
