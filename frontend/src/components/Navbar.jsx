@@ -32,7 +32,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <Link to="/" className="navbar-brand">
-        🚀 Orizon
+        🚀 Projeto Orizon
       </Link>
       <div className="navbar-menu">
         <div className="user-badge">

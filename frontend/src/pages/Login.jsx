@@ -34,8 +34,8 @@ export default function Login() {
     <div className="auth-wrapper">
       <div className="auth-card">
         <div className="auth-header">
-          <h1>🚀 Orizon</h1>
-          <p>Gerenciador de tarefas inteligente</p>
+          <h1>🚀 Projeto Orizon</h1>
+          <p>Sua lista de tarefas inteligente</p>
         </div>
 
         {error && <div className="error-message">{error}</div>}

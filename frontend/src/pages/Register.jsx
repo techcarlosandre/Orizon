@@ -56,7 +56,7 @@ export default function Register() {
       <div className="auth-card">
         <div className="auth-header">
           <h1>🚀 Criar Conta</h1>
-          <p>Cadastre-se na plataforma Orizon</p>
+          <p>Cadastre-se no Projeto Orizon</p>
         </div>
 
         {error && <div className="error-message">{error}</div>}
