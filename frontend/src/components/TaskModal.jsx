@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { extractErrorMessage } from "../utils/errors";
 
 export default function TaskModal({
   isOpen,
@@ -124,7 +125,7 @@ export default function TaskModal({
     } catch (err) {
       console.error(err);
       setError(
-        err.response?.data?.detail || "Erro ao salvar tarefa. Verifique os campos."
+        extractErrorMessage(err, "Erro ao salvar tarefa. Verifique os campos.")
       );
     } finally {
       setLoading(false);

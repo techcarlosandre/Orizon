@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import client from "../api/client";
+import { extractErrorMessage } from "../utils/errors";
 
 export function useTasks() {
   const [tasks, setTasks] = useState([]);
@@ -104,7 +105,7 @@ export function useTasks() {
       return data;
     } catch (err) {
       console.error(err);
-      const msg = err.response?.data?.detail || err.response?.data?.username?.[0] || err.response?.data?.email?.[0] || "Erro ao compartilhar tarefa.";
+      const msg = extractErrorMessage(err, "Erro ao compartilhar tarefa.");
       throw new Error(msg);
     }
   };

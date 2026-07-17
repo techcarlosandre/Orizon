@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import client from "../api/client";
+import { extractErrorMessage } from "../utils/errors";
 
 export function useCategories() {
   const [categories, setCategories] = useState([]);
@@ -29,7 +30,7 @@ export function useCategories() {
       return data;
     } catch (err) {
       console.error(err);
-      const msg = err.response?.data?.name?.[0] || "Erro ao criar categoria.";
+      const msg = extractErrorMessage(err, "Erro ao criar categoria.");
       setError(msg);
       throw new Error(msg);
     }

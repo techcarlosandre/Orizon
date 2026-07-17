@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { extractErrorMessage } from "../utils/errors";
 
 export default function Login() {
   const { login } = useAuth();
@@ -22,8 +23,7 @@ export default function Login() {
     } catch (err) {
       console.error(err);
       setError(
-        err.response?.data?.detail || 
-        "Falha ao realizar login. Verifique suas credenciais."
+        extractErrorMessage(err, "Falha ao realizar login. Verifique suas credenciais.")
       );
     } finally {
       setLoading(false);

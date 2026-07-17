@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { extractErrorMessage } from "../utils/errors";
 
 export default function Register() {
   const { register } = useAuth();
@@ -41,21 +42,7 @@ export default function Register() {
       navigate("/");
     } catch (err) {
       console.error(err);
-      const data = err.response?.data;
-      if (data) {
-        // Tenta extrair mensagens granulares de erro retornadas pelo Django/DRF
-        if (typeof data === "object") {
-          const firstKey = Object.keys(data)[0];
-          const firstError = data[firstKey];
-          setError(
-            Array.isArray(firstError) ? firstError[0] : JSON.stringify(firstError)
-          );
-        } else {
-          setError(data.detail || "Erro ao realizar cadastro.");
-        }
-      } else {
-        setError("Erro ao realizar cadastro. Tente novamente mais tarde.");
-      }
+      setError(extractErrorMessage(err, "Erro ao realizar cadastro."));
     } finally {
       setLoading(false);
     }
