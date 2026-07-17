@@ -3,7 +3,7 @@
 [![Backend CI](https://github.com/techcarlosandre/Orizon/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/techcarlosandre/Orizon/actions/workflows/backend-ci.yml)
 [![Frontend CI](https://github.com/techcarlosandre/Orizon/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/techcarlosandre/Orizon/actions/workflows/frontend-ci.yml)
 
-> Uma aplicação web de gerenciamento de tarefas profissional e de alto desempenho. Construída sob as melhores práticas de **Clean Code**, **Testes Automatizados (98% de cobertura)** e infraestrutura robusta na **AWS** com **SSL/HTTPS**.
+> Uma aplicação web de gerenciamento de tarefas profissional e de alto desempenho. Construída sob as melhores práticas de **Clean Code**, **Testes Automatizados (unitários, de integração e fim a fim)** e infraestrutura robusta na **AWS** com **SSL/HTTPS**.
 
 ---
 
@@ -31,7 +31,7 @@ graph TD
 * **Frontend:** React 18, Vite 5, Axios (com interceptores de refresh token automático), Vanilla CSS.
 * **Banco de Dados:** PostgreSQL 16 (Alpine).
 * **Infraestrutura & DevOps:** AWS EC2, Docker & Docker Compose, Nginx, Let's Encrypt (Certbot), GitHub Actions.
-* **Qualidade & Testes:** pytest (unitário/integração com 98% de cobertura), Selenium Webdriver (E2E com Chrome Headless).
+* **Qualidade & Testes:** pytest (testes unitários e de integração), Selenium Webdriver (testes E2E com Chrome Headless).
 
 ---
 
@@ -46,26 +46,13 @@ graph TD
 
 ## 🔬 Qualidade de Código & Cobertura de Testes
 
-A qualidade do projeto é garantida por uma robusta suíte com mais de 100 testes automatizados, integrados em um pipeline de Integração Contínua (CI) no GitHub Actions.
+A qualidade do projeto é garantida por uma robusta suíte de testes automatizados, integrados em um pipeline de Integração Contínua (CI) no GitHub Actions.
 
-### Cobertura de Testes do Backend (98%)
-```text
-Name                                                                                       Stmts   Miss  Cover
-------------------------------------------------------------------------------------------------------------------------
-backend/apps/accounts/models.py                                                                7      1    86%
-backend/apps/accounts/serializers.py                                                          26      0   100%
-backend/apps/accounts/views.py                                                                56      2    96%
-backend/apps/suggestions/client.py                                                            27      0   100%
-backend/apps/suggestions/service.py                                                           15      0   100%
-backend/apps/tasks/models.py                                                                  57      3    95%
-backend/apps/tasks/serializers.py                                                             73      2    97%
-backend/apps/tasks/views.py                                                                   76      0   100%
-------------------------------------------------------------------------------------------------------------------------
-TOTAL                                                                                        466      8    98%
-```
+### Testes Automatizados no Backend (pytest)
+Os testes unitários e de integração validam as regras de negócio das entidades de tarefas, as validações de restrições de categorias, o fluxo de envio de e-mails transacionais e a lógica de permissões de compartilhamento.
 
 ### Testes Fim a Fim (E2E) com Selenium
-Os testes simulando a jornada real do usuário (Registro -> Login -> Criar Categoria -> Criar Tarefa -> Concluir -> Logout) rodam de forma automatizada em modo headless (sem interface gráfica), tanto localmente quanto no ambiente de CI do GitHub Actions.
+Os testes simulam a jornada real do usuário (Registro -> Login -> Criar Categoria -> Criar Tarefa -> Concluir -> Logout) e rodam de forma automatizada em modo headless (sem interface gráfica), tanto localmente quanto no ambiente de CI do GitHub Actions.
 
 ---
 
