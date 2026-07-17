@@ -12,17 +12,50 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy via SSH
+      - name: Sync code and trigger build in background
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          command_timeout: 30m
+          command_timeout: 5m
           script: |
             cd /var/www/orizon
             git fetch origin
             git reset --hard origin/main
-            docker compose -f docker-compose.prod.yml build backend
-            docker compose -f docker-compose.prod.yml build frontend
-            docker compose -f docker-compose.prod.yml up -d
+            rm -f /tmp/deploy_exit_code
+            nohup bash -c '
+              docker compose -f docker-compose.prod.yml build backend &&
+              docker compose -f docker-compose.prod.yml build frontend &&
+              docker compose -f docker-compose.prod.yml up -d
+              echo $? > /tmp/deploy_exit_code
+            ' > /tmp/deploy.log 2>&1 &
+            echo "Build started in background (PID $!). Waiting for completion..."
+
+      - name: Wait for background deploy to finish
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 25m
+          script: |
+            echo "Waiting for deploy to complete..."
+            for i in $(seq 1 150); do
+              if [ -f /tmp/deploy_exit_code ]; then
+                EXIT_CODE=$(cat /tmp/deploy_exit_code)
+                echo "--- Deploy log ---"
+                tail -n 30 /tmp/deploy.log
+                echo "------------------"
+                if [ "$EXIT_CODE" = "0" ]; then
+                  echo "Deploy completed successfully!"
+                  exit 0
+                else
+                  echo "Deploy FAILED with exit code $EXIT_CODE"
+                  exit 1
+                fi
+              fi
+              sleep 10
+            done
+            echo "Deploy timed out after 25 minutes"
+            exit 1
