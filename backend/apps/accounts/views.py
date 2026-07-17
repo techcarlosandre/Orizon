@@ -53,10 +53,9 @@ class RegisterView(APIView):
 
         subject = "Bem-vindo ao Projeto Orizon!"
         message = (
-            f"Bem-vindo {first_name} {last_name}!\n\n"
-            f"O seu usuário é: {username}\n\n"
-            f"Seja bem-vindo ao nosso aplicativo Projeto Orizon.\n\n"
-            "Seja muito bem-vindo. Qualquer dúvida, pode entrar em contato com: techcarlosandre@gmail.com"
+            f"Seja bem-vindo, {first_name} {last_name}!\n\n"
+            f"Esse é o nosso aplicativo Projeto Orizon para listas automatizadas e o seu usuário é: {username}\n\n"
+            "Qualquer dúvida pode entrar em contato com techcarlosandre@gmail.com"
         )
         try:
             send_mail(

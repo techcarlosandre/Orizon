@@ -14,10 +14,20 @@ export default function Register() {
   const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Por favor, insira um e-mail válido contendo '@' e um domínio.");
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("A senha precisa conter pelo menos 8 caracteres.");
+      return;
+    }
 
     if (password !== passwordConfirm) {
       setError("As senhas não conferem.");
