@@ -45,6 +45,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       target: production
+      args:
+        - VITE_API_BASE_URL=https://orizon.techcarlos.com.br/api
     container_name: orizon_frontend_prod
     restart: always
     ports:

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // A URL base é lida da env do Vite. Fallback para localhost em desenvolvimento local.
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 
 const client = axios.create({
   baseURL: API_BASE_URL,
